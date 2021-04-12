@@ -1,0 +1,27 @@
+
+stages:
+  - build
+  # - test
+
+.docker:
+  tags:
+    - dind
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build-job:
+  extends: .docker
+  stage: build
+  script:
+    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - docker build -t gitlab.akvelon.net:9444/mikhail.shaganov/marketplace/server -f marketplace.dockerfile .
+    - docker push gitlab.akvelon.net:9444/mikhail.shaganov/marketplace/server
+
+# test-server:
+#   extends: .docker
+#   stage: test
+#   script:
+#     - echo "Start testing commands"
+
+#We should uncomment this part of code when will add tests for project
